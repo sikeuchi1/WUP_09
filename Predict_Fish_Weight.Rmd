@@ -1,6 +1,6 @@
 ---
 title: "Weight of Fish"
-author: "Your Name"
+author: "Shaun Ikeuchi"
 date: "`r Sys.Date()`"  
 output: 
   html_document:
@@ -18,25 +18,74 @@ require(tigerstats)
 require(tidyverse)
 ```
 
-# Predicting Fish Weight
+#Load Fish CSV
+```{r}
+fishdata <- read.csv("Fish.csv")
+unique(fishdata$Species)
+```
 
 
 ## Perch
+```{r}
+
+perchFish <- filter(fishdata, Species=="Perch")
+perchFish <- perchFish %>%
+  select(-Species)
+
+```
 
 ### Best Models
+We find best models for all three species. 
+
 
 ### Best Two regressor model
+```{r}
+perchModel <- lm(Weight~., data=perchFish)
+summary(perchModel)
+```
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = perchFish,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
 
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
 
+  
+##Which is best??  
+
+```{r}
+which.max(summary.out$adjr2)
+```
+```{r}
+summary.out$which[3,]
+```
+
+```{r}
+best2.model <- lm(Weight~Height+Width,data=perchFish)
+summary(best2.model)
+```
+
+```{r}
+anova(perchModel,best2.model)
+```
 ## Pike
 
 ### Best Models
 
 ### Best Two regressor model
-
 ## Roach
 
 ### Best Models
+
 
 ### Best Two regressor model
 
