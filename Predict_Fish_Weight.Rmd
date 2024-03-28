@@ -78,15 +78,78 @@ summary(best2.model)
 anova(perchModel,best2.model)
 ```
 ## Pike
+```{r}
 
+pikeFish <- filter(fishdata, Species=="Pike")
+pikeFish <- pikeFish %>%
+  select(-Species)
+
+```
 ### Best Models
-
+```{r}
+pikeModel <- lm(Weight~., data=pikeFish)
+summary(pikeModel)
+```
 ### Best Two regressor model
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = pikeFish,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+
+```{r}
+best2.model <- lm(Weight~Length1+Length3,data=pikeFish)
+summary(best2.model)
+```
+
+```{r}
+anova(pikeModel,best2.model)
+```
 ## Roach
+```{r}
 
+roachFish <- filter(fishdata, Species=="Roach")
+roachFish <- roachFish %>%
+  select(-Species)
+
+```
 ### Best Models
-
+```{r}
+roachModel <- lm(Weight~., data=roachFish)
+summary(roachModel)
+```
 
 ### Best Two regressor model
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = roachFish,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
 
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+```{r}
+best2.model <- lm(Weight~Length3+Width,data=roachFish)
+summary(best2.model)
+```
+```{r}
+anova(roachModel,best2.model)
+```
 ## Final Summary Statements
