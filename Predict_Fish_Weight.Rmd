@@ -65,6 +65,8 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
 ```{r}
 which.max(summary.out$adjr2)
 ```
+
+The best two parameters to predict weight is height and width.
 ```{r}
 summary.out$which[3,]
 ```
@@ -112,6 +114,8 @@ best2.model <- lm(Weight~Length1+Length3,data=pikeFish)
 summary(best2.model)
 ```
 
+The best two parameters to predict weight in a pike Fish is l1 and l3.
+
 ```{r}
 anova(pikeModel,best2.model)
 ```
@@ -152,4 +156,16 @@ summary(best2.model)
 ```{r}
 anova(roachModel,best2.model)
 ```
+```{r}
+which.max(summary.out$adjr2)
+```
+The best two parameters to predict weight is L3 and Width.
+
 ## Final Summary Statements
+
+
+The best two parameters to predict weight in a perch fish is height and width.
+The best two parameters to predict weight in a pike fish is l1 and l3.
+The best two parameters to predict weight in a roach fish is l3 and width.
+
+
